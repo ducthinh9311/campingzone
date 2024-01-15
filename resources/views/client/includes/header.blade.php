@@ -13,18 +13,19 @@
                 <div class="col-md-6">
                     <div class="text-center text-md-right">
                         <ul class="header_list">
-                            <li><a href="{{ route('client.cart.index') }}"><i
-                                        class="ti-shopping-cart"></i><span>Giỏ hàng</span></a></li>
-                            <li><a href="{{ route('client.wishlist.index') }}"><i
-                                        class="ti-heart"></i><span>Yêu thích</span></a></li>
-                            @if(auth()->check())
+                            <li><a href="{{ route('client.cart.index') }}"><i class="ti-shopping-cart"></i><span>Giỏ
+                                        hàng</span></a></li>
+                            <li><a href="{{ route('client.wishlist.index') }}"><i class="ti-heart"></i><span>Yêu
+                                        thích</span></a></li>
+                            @if (auth()->check())
                                 <li><a href="{{ route('client.customers.index') }}"><i
-                                            class="ti-user"></i><span>{{ auth()->user()->name ?? "Khách hàng" }}</span></a></li>
-                                <li><a href="{{ route('client.auth.logout') }}"><i
-                                            class="ti-lock"></i><span>Đăng xuất</span></a></li>
+                                            class="ti-user"></i><span>{{ auth()->user()->name ?? 'Khách hàng' }}</span></a>
+                                </li>
+                                <li><a href="{{ route('client.auth.logout') }}"><i class="ti-lock"></i><span>Đăng
+                                            xuất</span></a></li>
                             @else
-                                <li><a href="{{ route('client.auth.login') }}"><i
-                                            class="ti-user"></i><span>Đăng nhập</span></a></li>
+                                <li><a href="{{ route('client.auth.login') }}"><i class="ti-user"></i><span>Đăng
+                                            nhập</span></a></li>
                             @endif
                         </ul>
                     </div>
@@ -37,15 +38,15 @@
             <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand" href="{{ route('client.home') }}">
                     <img class="logo_light"
-                         src="{{ hwa_setting('site_logo_light') ? hwa_image_url("system", hwa_setting('site_logo_light')) : "shopwise/assets/images/logo_light.png" }}"
-                         alt="logo" height="40"/>
+                        src="{{ hwa_setting('site_logo_light') ? hwa_image_url('system', hwa_setting('site_logo_light')) : 'shopwise/assets/images/logo_light.png' }}"
+                        alt="logo" height="40" />
                     <img class="logo_dark"
-                         src="{{ hwa_setting('site_logo_dark') ? hwa_image_url("system", hwa_setting('site_logo_dark')) : "shopwise/assets/images/logo_dark.png" }}"
-                         alt="logo" height="40"/>
+                        src="{{ hwa_setting('site_logo_dark') ? hwa_image_url('system', hwa_setting('site_logo_dark')) : 'shopwise/assets/images/logo_dark.png' }}"
+                        alt="logo" height="40" />
                 </a>
                 CampingZone
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-expanded="false">
+                    data-target="#navbarSupportedContent" aria-expanded="false">
                     <span class="ion-android-menu"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
@@ -56,16 +57,16 @@
                                 phẩm</a>
                             <div class="dropdown-menu dropdown-reverse">
                                 <ul>
-                                    @foreach($global_categories as $global_category)
+                                    @foreach ($global_categories as $global_category)
                                         <li>
-                                            <a class="dropdown-item menu-link {{ (isset($global_category->childCategories) && count($global_category->childCategories) > 0) ? "dropdown-toggler" : "" }}"
-                                               href="{{ route('client.category.show', ['slug' => $global_category['slug']]) }}">{{ $global_category['name'] ?? "" }}</a>
-                                            @if(isset($global_category->childCategories) && count($global_category->childCategories) > 0)
+                                            <a class="dropdown-item menu-link {{ isset($global_category->childCategories) && count($global_category->childCategories) > 0 ? 'dropdown-toggler' : '' }}"
+                                                href="{{ route('client.category.show', ['slug' => $global_category['slug']]) }}">{{ $global_category['name'] ?? '' }}</a>
+                                            @if (isset($global_category->childCategories) && count($global_category->childCategories) > 0)
                                                 <div class="dropdown-menu">
                                                     <ul>
-                                                        @foreach($global_category->childCategories as $childCategory)
+                                                        @foreach ($global_category->childCategories as $childCategory)
                                                             <li><a class="dropdown-item nav-link nav_item"
-                                                                   href="{{ route('client.category.show', ['slug' => $childCategory['slug']]) }}">{{ $childCategory['name'] ?? "" }}</a>
+                                                                    href="{{ route('client.category.show', ['slug' => $childCategory['slug']]) }}">{{ $childCategory['name'] ?? '' }}</a>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -88,27 +89,30 @@
                             <span class="close-search"><i class="ion-ios-close-empty"></i></span>
                             <form action="{{ route('client.search') }}" method="get">
                                 <input type="text" placeholder="Nhập để tìm kiếm" class="form-control"
-                                       id="search_input" name="q">
-                                <button type="submit" class="search_icon"><i class="ion-ios-search-strong"></i></button>
+                                    id="search_input" name="q">
+                                <button type="submit" class="search_icon"><i
+                                        class="ion-ios-search-strong"></i></button>
                             </form>
                         </div>
                         <div class="search_overlay"></div>
                     </li>
                     <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="javascript:void(0);"
-                                                          data-toggle="dropdown"><i class="linearicons-cart"></i><span
+                            data-toggle="dropdown"><i class="linearicons-cart"></i><span
                                 class="cart_count">{{ $cart['count'] ?? 0 }}</span></a>
                         <div class="cart_box dropdown-menu dropdown-menu-right">
                             <ul class="cart_list">
-                                @if(auth()->check() && $cart['count'] > 0)
-                                    @foreach($cart['data'] as $cartProduct)
+                                @if (auth()->check() && $cart['count'] > 0)
+                                    @foreach ($cart['data'] as $cartProduct)
                                         <li>
                                             <a href="{{ route('client.product.show', ['slug' => $cartProduct['product_slug']]) }}"
-                                               class="item_remove"><i class="ion-close"></i></a>
-                                            <a href="{{ route('client.product.show', ['slug' => $cartProduct['product_slug']]) }}"><img
+                                                class="item_remove"><i class="ion-close"></i></a>
+                                            <a
+                                                href="{{ route('client.product.show', ['slug' => $cartProduct['product_slug']]) }}"><img
                                                     src="{{ $cartProduct['product_thumb'] }}"
                                                     alt="cart_thumb2">{{ $cartProduct['product_name'] }}</a>
                                             <span class="cart_quantity">
-                                                {{ $cartProduct['quantity'] }} x <span class="cart_amount"> {{ number_format($cartProduct['product_price']) }} đ</span>
+                                                {{ $cartProduct['quantity'] }} x <span class="cart_amount">
+                                                    {{ number_format($cartProduct['product_price']) }} đ</span>
                                             </span>
                                         </li>
                                     @endforeach
@@ -118,13 +122,16 @@
                                     </li>
                                 @endif
                             </ul>
-                            @if(auth()->check() && $cart['count'] > 0)
+                            @if (auth()->check() && $cart['count'] > 0)
                                 <div class="cart_footer">
-                                    <p class="cart_total"><strong>Tạm tính:</strong> <span class="cart_price">{{ number_format($cart['subtotal'] ?? 0) }} đ</span>
+                                    <p class="cart_total"><strong>Tạm tính:</strong> <span
+                                            class="cart_price">{{ number_format($cart['subtotal'] ?? 0) }} đ</span>
                                     </p>
                                     <p class="cart_buttons">
-                                        <a href="{{ route('client.cart.index') }}" class="btn btn-fill-line view-cart">Giỏ hàng</a>
-                                        <a href="{{ route('client.checkout') }}" class="btn btn-fill-out checkout">Thanh toán</a>
+                                        <a href="{{ route('client.cart.index') }}"
+                                            class="btn btn-fill-line view-cart">Giỏ hàng</a>
+                                        <a href="{{ route('client.checkout') }}"
+                                            class="btn btn-fill-out checkout">Thanh toán</a>
                                     </p>
                                 </div>
                             @endif
