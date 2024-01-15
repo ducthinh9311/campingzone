@@ -288,6 +288,17 @@ class CartController extends Controller
                     ]);
                 }
             }
+            $carts = $this->cart->whereCustomerId(auth()->id())->get();
+
+            $dataEmail = [];
+            foreach ($carts as $cart) {
+                $product = Product::query()->where('id',$cart->product_id)->first();
+                $dataEmail[] = [
+                    'quantity' => $cart->quantity,
+                    'product' =>  $product,
+                ];
+            }
+            Mail::to($customer->email)->send(new OrderMail($dataEmail,$total));
 
             if ($request['payment_option'] == 'vnpay') {
                 if (hwa_setting('vnp_sandbox') == 'sandbox') {
@@ -350,7 +361,6 @@ class CartController extends Controller
                 return redirect()->to($vnp_Url);
             }
 
-            $carts = $this->cart->whereCustomerId(auth()->id())->get();
 
             foreach ($carts as $cart) {
 
@@ -364,21 +374,13 @@ class CartController extends Controller
 
 
 
-            $dataEmail = [];
-            foreach ($carts as $cart) {
-                $product = Product::query()->where('id',$cart->product_id)->first();
-                $dataEmail[] = [
-                    'quantity' => $cart->quantity,
-                    'product' =>  $product,
-                ];
-            }
 
- foreach ($carts as $cart) {
+
+            foreach ($carts as $cart) {
 
                 $cart->delete();
             }
             session(['payment' => true]);
-            Mail::to($customer->email)->send(new OrderMail($dataEmail,$total));
 
             hwa_notify_success("Đặt hàng thành công.");
             return redirect()->route('client.checkout.complete');
